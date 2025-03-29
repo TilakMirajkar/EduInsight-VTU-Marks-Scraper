@@ -15,7 +15,7 @@ from django.http import HttpResponse
 
 class ResultScraperService:
     def __init__(self):
-        self.tesseract_path = r'Tesseract-OCR/tesseract.exe'
+        self.tesseract_path = r'backend/Tesseract-OCR/tesseract.exe'
         pytesseract.pytesseract.tesseract_cmd = self.tesseract_path
     
     def execute_scraping(self, prefix_usn, usn_range, url, is_reval):
