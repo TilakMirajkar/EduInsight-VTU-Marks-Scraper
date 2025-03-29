@@ -51,7 +51,7 @@ class ResultScraperService:
         options.add_argument('--headless')
         options.add_argument('--disable-dev-shm-usage')
 
-        service = Service(executable_path='backend/app/Chrome/chromedriver.exe')
+        service = Service(executable_path='Chrome/chromedriver.exe')
         driver = webdriver.Chrome(options=options, service=service)
         driver.get(url)
         return driver
