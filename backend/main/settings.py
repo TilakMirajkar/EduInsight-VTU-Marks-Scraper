@@ -27,12 +27,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG")
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
     "https://aitmeduinsight.vercel.app",
 ]
 
@@ -52,7 +51,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -85,12 +83,10 @@ WSGI_APPLICATION = 'main.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
+DATABASE_URL = os.environ.get("DATABASE_URL")
 DATABASES = {
-    'default': dj_database_url.config(       
-        default='postgresql://eduadmin:SP5xPOP2T3Vgtvmh9YtMTkmjX92DZBFF@dpg-cvjr6cmuk2gs73a1snqg-a.oregon-postgres.render.com/edudb_lpj1',
-        conn_max_age=600
-    )}
+    'default': dj_database_url.config(default=DATABASE_URL)
+}
 
 
 # Password validation
@@ -132,10 +128,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
-if not DEBUG:    # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-    # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
-    # and renames the files with unique names for each version to support long-term caching
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
