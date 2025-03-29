@@ -10,7 +10,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
 from django.http import HttpResponse
 
 
@@ -51,8 +52,7 @@ class ResultScraperService:
         options.add_argument('--headless')
         options.add_argument('--disable-dev-shm-usage')
 
-        service = Service(executable_path='Chrome/chromedriver.exe')
-        driver = webdriver.Chrome(options=options, service=service)
+        driver = webdriver.Chrome(options=options, service=ChromeService(ChromeDriverManager().install()))
         driver.get(url)
         return driver
     
