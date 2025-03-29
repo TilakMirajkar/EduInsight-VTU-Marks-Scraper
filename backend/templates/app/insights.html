@@ -1,0 +1,270 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Marks Analysis Insights{% endblock %}
+
+{% block extra_css %}
+<style>
+    .analysis-card {
+        transition: transform 0.3s ease;
+    }
+    .analysis-card:hover {
+        transform: translateY(-5px);
+    }
+    .chart-container {
+        border-radius: 0.5rem;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .chart-container img {
+        width: 100%;
+        height: auto;
+    }
+    .tab-content {
+        display: none;
+    }
+    .tab-content.active {
+        display: block;
+    }
+    .tab-button.active {
+        background-color: #3b82f6;
+        color: white;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-8 text-center text-indigo-800">Marks Data Analysis Dashboard</h1>
+
+    <div class="mb-8 bg-white rounded-lg shadow-md p-6">
+        <h2 class="text-xl font-semibold mb-4">Upload Marks File</h2>
+        <form method="post" enctype="multipart/form-data" class="flex flex-col md:flex-row items-center gap-4">
+            {% csrf_token %}
+            <div class="flex-grow">
+                <input type="file" name="file" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded shadow transition">
+                Analyze Data
+            </button>
+        </form>
+        {% if error %}
+        <div class="mt-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            {{ error }}
+        </div>
+        {% endif %}
+    </div>
+
+    {% if table %}
+    <!-- Tab Navigation -->
+    <div class="mb-6 border-b border-gray-200">
+        <ul class="flex flex-wrap -mb-px text-sm font-medium text-center">
+            <li class="mr-2">
+                <button class="tab-button active inline-block p-4 rounded-t-lg border-b-2 border-blue-600" 
+                        onclick="changeTab(event, 'overview')">Overview</button>
+            </li>
+            <li class="mr-2">
+                <button class="tab-button inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" 
+                        onclick="changeTab(event, 'performance')">Performance Analysis</button>
+            </li>
+            <li class="mr-2">
+                <button class="tab-button inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" 
+                        onclick="changeTab(event, 'distribution')">Distributions</button>
+            </li>
+            <li class="mr-2">
+                <button class="tab-button inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" 
+                        onclick="changeTab(event, 'comparisons')">Comparisons</button>
+            </li>
+            <li class="mr-2">
+                <button class="tab-button inline-block p-4 rounded-t-lg border-b-2 border-transparent hover:text-gray-600 hover:border-gray-300" 
+                        onclick="changeTab(event, 'data')">Raw Data</button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Overview Tab -->
+    <div id="overview" class="tab-content active">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            <!-- Summary Statistics -->
+            {% if analysis_data.Summary_Statistics %}
+            <div class="analysis-card bg-white rounded-lg shadow-md p-6 col-span-1">
+                <h2 class="text-xl font-semibold mb-4 text-indigo-800">Summary Statistics</h2>
+                <div class="overflow-x-auto">
+                    {{ analysis_data.Summary_Statistics|safe }}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Performance Metrics -->
+            {% if performance_metrics.Overall_Statistics %}
+            <div class="analysis-card bg-white rounded-lg shadow-md p-6 col-span-1">
+                <h2 class="text-xl font-semibold mb-4 text-indigo-800">Overall Performance</h2>
+                <div class="overflow-x-auto">
+                    {{ performance_metrics.Overall_Statistics|safe }}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Grade Distribution -->
+            {% if grade_distributions.Grade_Distribution %}
+            <div class="analysis-card bg-white rounded-lg shadow-md p-6 col-span-1">
+                <h2 class="text-xl font-semibold mb-4 text-indigo-800">Grade Distribution</h2>
+                <div class="overflow-x-auto">
+                    {{ grade_distributions.Grade_Distribution|safe }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Top and Bottom Performers -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {% if analysis_data.Top_Performers %}
+            <div class="analysis-card bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4 text-green-700">Top Performers</h2>
+                <div class="overflow-x-auto">
+                    {{ analysis_data.Top_Performers|safe }}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if analysis_data.Students_Needing_Attention %}
+            <div class="analysis-card bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4 text-red-700">Students Needing Attention</h2>
+                <div class="overflow-x-auto">
+                    {{ analysis_data.Students_Needing_Attention|safe }}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- First 2 Charts (if available) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {% if chart_images|length > 0 %}
+            <div class="chart-container bg-white rounded-lg shadow-md p-4">
+                <img src="{{ chart_images.0 }}" alt="Analysis Chart">
+            </div>
+            {% endif %}
+            
+            {% if chart_images|length > 1 %}
+            <div class="chart-container bg-white rounded-lg shadow-md p-4">
+                <img src="{{ chart_images.1 }}" alt="Analysis Chart">
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Performance Analysis Tab -->
+    <div id="performance" class="tab-content">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {% for key, value in subject_performance.items %}
+            <div class="analysis-card bg-white rounded-lg shadow-md p-6">
+                <h2 class="text-xl font-semibold mb-4 text-blue-700">{{ key }} Performance</h2>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-3 bg-blue-50 rounded-lg">
+                        <p class="text-sm text-gray-600">Average</p>
+                        <p class="text-2xl font-bold">{{ value.Average|floatformat:2 }}</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 rounded-lg">
+                        <p class="text-sm text-gray-600">Median</p>
+                        <p class="text-2xl font-bold">{{ value.Median|floatformat:2 }}</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 rounded-lg">
+                        <p class="text-sm text-gray-600">Pass Rate</p>
+                        <p class="text-2xl font-bold">{{ value.Pass_Rate|floatformat:1 }}%</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 rounded-lg">
+                        <p class="text-sm text-gray-600">Distinction Rate</p>
+                        <p class="text-2xl font-bold">{{ value.Distinction_Rate|floatformat:1 }}%</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Subject Performance Chart -->
+        {% if chart_images|length > 2 %}
+        <div class="chart-container bg-white rounded-lg shadow-md p-4 mb-8">
+            <img src="{{ chart_images.2 }}" alt="Subject Performance Chart">
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Distributions Tab -->
+    <div id="distribution" class="tab-content">
+        <!-- Show histograms for each subject -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {% for index in chart_images|slice:"3:" %}
+            {% if forloop.counter < 7 %}
+            <div class="chart-container bg-white rounded-lg shadow-md p-4">
+                <img src="{{ index }}" alt="Distribution Chart">
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Comparisons Tab -->
+    <div id="comparisons" class="tab-content">
+        <!-- Correlation Heatmap -->
+        {% for index in chart_images|slice:"3:" %}
+        {% if forloop.counter == 7 %}
+        <div class="chart-container bg-white rounded-lg shadow-md p-4 mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-center text-purple-800">Correlation Between Subjects</h2>
+            <img src="{{ index }}" alt="Correlation Heatmap">
+        </div>
+        {% endif %}
+        {% endfor %}
+
+        <!-- Box Plot Comparison -->
+        {% for index in chart_images|slice:"3:" %}
+        {% if forloop.counter == 8 %}
+        <div class="chart-container bg-white rounded-lg shadow-md p-4 mb-8">
+            <h2 class="text-xl font-semibold mb-4 text-center text-purple-800">Comparative Performance</h2>
+            <img src="{{ index }}" alt="Comparative Performance">
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+
+    <!-- Raw Data Tab -->
+    <div id="data" class="tab-content">
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Raw Data Table</h2>
+            <div class="overflow-x-auto">
+                {{ table|safe }}
+            </div>
+        </div>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Missing Values</h2>
+            <div class="overflow-x-auto">
+                {{ analysis_data.Missing_Values|safe }}
+            </div>
+        </div>
+    </div>
+    
+    {% endif %}
+</div>
+
+{% block extra_js %}
+<script>
+    function changeTab(evt, tabName) {
+        // Hide all tab contents
+        var tabContents = document.getElementsByClassName("tab-content");
+        for (var i = 0; i < tabContents.length; i++) {
+            tabContents[i].classList.remove("active");
+        }
+        
+        // Remove active class from all tab buttons
+        var tabButtons = document.getElementsByClassName("tab-button");
+        for (var i = 0; i < tabButtons.length; i++) {
+            tabButtons[i].classList.remove("active");
+        }
+        
+        // Show the selected tab content and mark button as active
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
+</script>
+{% endblock %}
+{% endblock %}

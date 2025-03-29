@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="min-h-screen flex items-center justify-center px-4">
+        <div class="w-1/4">
+            <div class="text-center pt-8">
+                <h1 class="text-3xl font-semibold">Automate Scraping</h1>
+            </div>
+            <div>
+                <div class="mb-8 text-center">
+                    <p class="text-gray-500 text-sm font-semibold mt-2">Enter the details to scrape VTU results</p>
+                </div>
+                
+                <form method="post" class="space-y-5">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                    <div class="bg-red-50 p-3 rounded-md text-red-500 text-sm">
+                        {% for error in form.non_field_errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <div>
+                        <label for="{{ form.prefix_usn.id_for_label }}" class="block font-semibold text-sm text-gray-400 mb-1">{{ form.prefix_usn.label }}</label>
+                        <input type="text" name="{{ form.prefix_usn.html_name }}" id="{{ form.prefix_usn.id_for_label }}" 
+                               placeholder="{{ form.prefix_usn.field.widget.attrs.placeholder }}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black">
+                        {% if form.prefix_usn.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.prefix_usn.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.usn_range.id_for_label }}" class="block font-semibold text-sm text-gray-400 mb-1">{{ form.usn_range.label }}</label>
+                        <input type="text" name="{{ form.usn_range.html_name }}" id="{{ form.usn_range.id_for_label }}" 
+                               placeholder="{{ form.usn_range.field.widget.attrs.placeholder }}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black">
+                        {% if form.usn_range.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.usn_range.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.sem.id_for_label }}" class="block font-semibold text-sm text-gray-400 mb-1">{{ form.sem.label }}</label>
+                        <input type="number" name="{{ form.sem.html_name }}" id="{{ form.sem.id_for_label }}" 
+                               placeholder="{{ form.sem.field.widget.attrs.placeholder }}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black">
+                        {% if form.sem.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.sem.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <label for="{{ form.url.id_for_label }}" class="block font-semibold text-sm text-gray-400 mb-1">{{ form.url.label }}</label>
+                        <input type="url" name="{{ form.url.html_name }}" id="{{ form.url.id_for_label }}" 
+                               placeholder="{{ form.url.field.widget.attrs.placeholder }}" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-black">
+                        {% if form.url.errors %}
+                        <p class="text-red-500 text-xs mt-1">{{ form.url.errors.0 }}</p>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" class="w-full font-semibold flex items-center mt-4 justify-center bg-black hover:bg-gray-800 text-white py-2 px-4 rounded-md transition duration-300 ease-in-out">
+                        <i class="fas fa-download mr-3"></i>
+                        Start Scraping
+                    </button>
+                </form>
+                
+                <div class="mt-8 text-center">
+                    <p class="text-gray-600 font-semibold text-sm">
+                        <i class="fas fa-info-circle text-gray-400 mr-2"></i>
+                        Results will be downloaded as Excel file
+                    </p>
+                </div>
+            </div>
+        </div>
+</div>
+{% endblock%}
