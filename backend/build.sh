@@ -6,17 +6,19 @@ mkdir -p /opt/render/chrome/
 cd /opt/render/chrome/
 
 # Download and extract Chrome
-wget -qO- https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb > chrome.deb
-ar x chrome.deb
-tar -xf data.tar.xz
-mv usr/bin/google-chrome-stable /opt/render/chrome/google-chrome
+mkdir -p /opt/render/chrome/
+cd /opt/render/chrome/
 
-# Download ChromeDriver (version must match Chrome)
-CHROME_VERSION=$(./google-chrome --version | grep -oP '[0-9.]+' | head -1)
-wget -q "https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip"
-unzip chromedriver_linux64.zip
-chmod +x chromedriver
-mv chromedriver /opt/render/chrome/chromedriver
+# Download & extract Chrome (precompiled binary)
+wget -q https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_120.0.6099.199-1_amd64.deb -O chrome.deb
+dpkg-deb -x chrome.deb .
+mv opt/google/chrome/google-chrome /opt/render/chrome/google-chrome
+
+# Download ChromeDriver (match version manually)
+wget -q https://storage.googleapis.com/chrome-for-testing-public/120.0.6099.199/linux64/chromedriver-linux64.zip -O chromedriver.zip
+unzip chromedriver.zip
+mv chromedriver-linux64/chromedriver /opt/render/chrome/chromedriver
+chmod +x /opt/render/chrome/chromedriver
 
 pip install --upgrade pip
 # Modify this line as needed for your package manager (pip, poetry, etc.)
