@@ -54,6 +54,8 @@ class ResultScraperService:
         options.binary_location = "/opt/render/chrome/google-chrome"
 
         service = Service("/opt/render/chrome/chromedriver")
+        print("Chrome binary location:", options.binary_location)
+        print("ChromeDriver location:", service.path)
         driver = webdriver.Chrome(service=service, options=options)
         driver.get(url)
         return driver
