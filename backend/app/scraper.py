@@ -51,8 +51,9 @@ class ResultScraperService:
         options.add_argument('--no-sandbox')
         options.add_argument('--headless')
         options.add_argument('--disable-dev-shm-usage')
+        options.binary_location = "/opt/render/chrome/google-chrome"
 
-        service = Service("/usr/local/bin/chromedriver")
+        service = Service("/opt/render/chrome/chromedriver")
         driver = webdriver.Chrome(service=service, options=options)
         driver.get(url)
         return driver

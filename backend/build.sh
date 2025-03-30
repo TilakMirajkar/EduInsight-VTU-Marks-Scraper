@@ -2,15 +2,21 @@
 # Exit on error
 set -o errexit
 
-wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-apt install -y ./google-chrome-stable_current_amd64.deb
+mkdir -p /opt/render/chrome/
+cd /opt/render/chrome/
 
-# Install ChromeDriver (Ensure the version matches Chrome)
-CHROME_VERSION=$(google-chrome --version | grep -oP '[0-9.]+' | head -1)
+# Download and extract Chrome
+wget -qO- https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb > chrome.deb
+ar x chrome.deb
+tar -xf data.tar.xz
+mv usr/bin/google-chrome-stable /opt/render/chrome/google-chrome
+
+# Download ChromeDriver (version must match Chrome)
+CHROME_VERSION=$(./google-chrome --version | grep -oP '[0-9.]+' | head -1)
 wget -q "https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip"
 unzip chromedriver_linux64.zip
 chmod +x chromedriver
-mv chromedriver /usr/local/bin/
+mv chromedriver /opt/render/chrome/chromedriver
 
 pip install --upgrade pip
 # Modify this line as needed for your package manager (pip, poetry, etc.)
