@@ -9,13 +9,18 @@ mkdir -p $CHROME_DIR
 cd $CHROME_DIR
 
 # Download Chrome (Prebuilt Binary)
-wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O chrome.deb
-dpkg-deb -x chrome.deb $CHROME_DIR
-mv $CHROME_DIR/opt/google/chrome/google-chrome $CHROME_DIR/google-chrome
+CHROME_DIR="/opt/render/chrome"
+mkdir -p $CHROME_DIR
+cd $CHROME_DIR
 
-# Download ChromeDriver (Manually match version)
-CHROME_VERSION=$($CHROME_DIR/google-chrome --version | grep -oP '[0-9.]+' | head -1)
-wget -q "https://storage.googleapis.com/chrome-for-testing-public/$CHROME_VERSION/linux64/chromedriver-linux64.zip" -O chromedriver.zip
+# Download precompiled Chrome (NOT a .deb package)
+wget -q https://storage.googleapis.com/chrome-for-testing-public/120.0.6099.199/linux64/chrome-linux64.zip -O chrome.zip
+unzip chrome.zip
+mv chrome-linux64/chrome $CHROME_DIR/google-chrome
+chmod +x $CHROME_DIR/google-chrome
+
+# Download ChromeDriver (Match Chrome version manually)
+wget -q https://storage.googleapis.com/chrome-for-testing-public/120.0.6099.199/linux64/chromedriver-linux64.zip -O chromedriver.zip
 unzip chromedriver.zip
 mv chromedriver-linux64/chromedriver $CHROME_DIR/chromedriver
 chmod +x $CHROME_DIR/chromedriver
