@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ["*"]
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
+    "https://apieduinsight.railway.app",
     "http://localhost:3000",  # For local frontend dev (e.g., React)
     "https://aitmeduinsight.vercel.app/",  # Add your production frontend
 ]
