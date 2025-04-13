@@ -31,11 +31,18 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
-# CORS settings
+## CORS settings
 CORS_ALLOWED_ORIGINS = [
-    "https://aitmeduinsight.vercel.app",  # Add your production frontend
+    "https://aitmeduinsight.vercel.app",
 ]
-CORS_ALLOW_CREDENTIALS = False  # Set to True if using auth
+CORS_ALLOW_CREDENTIALS = False  # No auth in your API
+CORS_ALLOW_METHODS = ["GET", "POST", "OPTIONS"]  # Explicit for preflight
+CORS_ALLOW_HEADERS = [
+    "content-type",
+    "accept",
+    "origin",
+    "authorization",
+]
 
 CSRF_TRUSTED_ORIGINS = [
     "https://apieduinsight.railway.app",
