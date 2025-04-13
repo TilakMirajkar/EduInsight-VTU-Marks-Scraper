@@ -32,6 +32,7 @@ DEBUG = False
 ALLOWED_HOSTS = ["*"]
 
 ## CORS settings
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOWED_ORIGINS = [
     "https://aitmeduinsight.vercel.app",
 ]
