@@ -33,16 +33,13 @@ ALLOWED_HOSTS = ["*"]
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-    "https://apieduinsight.railway.app",
-    "http://localhost:3000",  # For local frontend dev (e.g., React)
-    "https://aitmeduinsight.vercel.app/",  # Add your production frontend
+    "https://aitmeduinsight.vercel.app",  # Add your production frontend
 ]
 CORS_ALLOW_CREDENTIALS = False  # Set to True if using auth
 
 CSRF_TRUSTED_ORIGINS = [
     "https://apieduinsight.railway.app",
-    "http://localhost:3000",
-    "https://aitmeduinsight.vercel.app/",
+    "https://aitmeduinsight.vercel.app",
 ]
 
 # Application definition
@@ -60,10 +57,10 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
