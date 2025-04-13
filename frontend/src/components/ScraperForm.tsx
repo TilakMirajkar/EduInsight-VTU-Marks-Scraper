@@ -351,7 +351,7 @@ export default function SignupForm() {
     }
   
     try {
-      const response = await fetch("https://eduinsight-backend.onrender.com/api/form/", {
+      const response = await fetch("https://eduinsight.railway.app/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
