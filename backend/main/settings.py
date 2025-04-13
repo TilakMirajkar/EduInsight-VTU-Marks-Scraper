@@ -33,17 +33,15 @@ ALLOWED_HOSTS = ["*"]
 
 # CORS settings
 CORS_ALLOWED_ORIGINS = [
-    "https://railway.com",  # Replace with your actual frontend domain
     "http://localhost:3000",  # For local frontend dev (e.g., React)
-    "https://your-frontend-domain.com",  # Add your production frontend
+    "https://aitmeduinsight.vercel.app/",  # Add your production frontend
 ]
 CORS_ALLOW_CREDENTIALS = False  # Set to True if using auth
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://eduinsight.railway.app",
-    "https://railway.com",  # Replace with frontend domain
+    "https://apieduinsight.railway.app",
     "http://localhost:3000",
-    "https://your-frontend-domain.com",
+    "https://aitmeduinsight.vercel.app/",
 ]
 
 # Application definition
