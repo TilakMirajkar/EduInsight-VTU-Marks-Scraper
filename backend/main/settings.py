@@ -31,24 +31,24 @@ DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
-## CORS settings
-CORS_ORIGIN_ALLOW_ALL = True
-CORS_ALLOWED_ORIGINS = [
-    "https://aitmeduinsight.vercel.app",
-]
-CORS_ALLOW_CREDENTIALS = False  # No auth in your API
-CORS_ALLOW_METHODS = ["GET", "POST", "OPTIONS"]  # Explicit for preflight
-CORS_ALLOW_HEADERS = [
-    "content-type",
-    "accept",
-    "origin",
-    "authorization",
-]
+# ## CORS settings
+# CORS_ORIGIN_ALLOW_ALL = True
+# CORS_ALLOWED_ORIGINS = [
+#     "https://aitmeduinsight.vercel.app",
+# ]
+# CORS_ALLOW_CREDENTIALS = False  # No auth in your API
+# CORS_ALLOW_METHODS = ["GET", "POST", "OPTIONS"]  # Explicit for preflight
+# CORS_ALLOW_HEADERS = [
+#     "content-type",
+#     "accept",
+#     "origin",
+#     "authorization",
+# ]
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://apieduinsight.railway.app",
-    "https://aitmeduinsight.vercel.app",
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://apieduinsight.railway.app",
+#     "https://aitmeduinsight.vercel.app",
+# ]
 
 # Application definition
 
@@ -60,12 +60,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'corsheaders',
     'app',
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
