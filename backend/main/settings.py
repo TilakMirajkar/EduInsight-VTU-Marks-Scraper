@@ -46,7 +46,6 @@ CORS_ALLOW_HEADERS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://apieduinsight.railway.app",
     "https://aitmeduinsight.vercel.app",
 ]
 
