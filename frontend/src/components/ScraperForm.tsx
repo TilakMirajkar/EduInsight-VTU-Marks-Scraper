@@ -64,7 +64,7 @@ export default function SignupForm() {
     }
 
     try {
-      const response = await fetch("https://apieduinsight.railway.app/api/scrape", {
+      const response = await fetch("https://aitmeduinsight.up.railway.app/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
