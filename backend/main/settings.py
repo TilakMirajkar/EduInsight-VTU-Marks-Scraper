@@ -33,9 +33,7 @@ ALLOWED_HOSTS = ["*"]
 
 ## CORS settings
 CORS_ORIGIN_ALLOW_ALL = DEBUG
-CORS_ALLOWED_ORIGINS = [
-    "https://aitmeduinsight.vercel.app",
-]
+CORS_ALLOWED_ORIGINS = ["*"]
 CORS_ALLOW_CREDENTIALS = False  # No auth in your API
 CORS_ALLOW_METHODS = ["GET", "POST", "OPTIONS"]  # Explicit for preflight
 CORS_ALLOW_HEADERS = [
