@@ -23,4 +23,4 @@ ENV PYTHONUNBUFFERED=1
 ENV PORT=8000
 
 # Run Django
-CMD ["gunicorn", "--bind", "0.0.0.0:$PORT", "main.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "main.wsgi:application"]
